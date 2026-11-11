@@ -1,0 +1,77 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Book a Service | SmartService</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <header>
+        <h1>SmartService</h1>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="index.html#services">Services</a>
+        </nav>
+    </header>
+
+    <main class="booking-page">
+        <section class="booking-intro">
+            <p class="eyebrow">SIMPLE. RELIABLE. CONVENIENT.</p>
+            <h2>Book a Service</h2>
+            <p>Tell us what you need, and choose a convenient time.</p>
+        </section>
+
+        <section class="booking-layout">
+            <div class="booking-form-card">
+                <h3>Booking Details</h3>
+
+                <form id="booking-form">
+                    <label for="customerId">Customer ID</label>
+                    <input
+                        type="number"
+                        id="customerId"
+                        min="1"
+                        placeholder="Enter your customer ID"
+                        required
+                    >
+
+                    <label for="providerId">Choose a Provider</label>
+                    <select id="providerId" required>
+                        <option value="">Loading providers...</option>
+                    </select>
+
+                    <label for="bookingDate">Preferred Date</label>
+                    <input type="date" id="bookingDate" required>
+
+                    <label for="bookingTime">Preferred Time</label>
+                    <input type="time" id="bookingTime" required>
+
+                    <button type="submit">Confirm Booking</button>
+
+                    <p id="booking-message" role="status"></p>
+                </form>
+            </div>
+
+            <aside class="booking-summary">
+                <h3>Your Selected Service</h3>
+                <div id="selected-service">
+                    <p>Loading service details...</p>
+                </div>
+                <a href="index.html#services" class="back-link">
+                    ← Choose another service
+                </a>
+            </aside>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 SmartService. All rights reserved.</p>
+    </footer>
+
+    <script src="js/booking.js"></script>
+</body>
+</html>

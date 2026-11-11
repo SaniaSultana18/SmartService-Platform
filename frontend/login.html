@@ -1,0 +1,113 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | SmartService</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <h1>SmartService</h1>
+    <h2>Login to Your Account</h2>
+
+    <form id="loginForm">
+        <div>
+            <label for="email">Email:</label>
+            <input type="email" id="email" autocomplete="username" required>
+        </div>
+
+        <br>
+
+        <div>
+            <label for="password">Password:</label>
+            <input type="password" id="password" autocomplete="current-password" required>
+        </div>
+
+        <br>
+
+        <button type="submit">Login</button>
+    </form>
+
+    <p id="message"></p>
+
+    <script>
+        const loginForm = document.getElementById("loginForm");
+        const message = document.getElementById("message");
+
+        loginForm.addEventListener("submit", async function (event) {
+            event.preventDefault();
+
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value;
+
+            message.textContent = "Logging in...";
+            message.style.color = "black";
+
+            try {
+                // Step 1: Get the CSRF token
+                const csrfResponse = await fetch(
+                    "http://127.0.0.1:8080/api/csrf",
+                    {
+                        method: "GET",
+                        credentials: "include"
+                    }
+                );
+
+                if (!csrfResponse.ok) {
+                    throw new Error("Unable to obtain CSRF token");
+                }
+
+                const csrfData = await csrfResponse.json();
+
+                // Step 2: Submit login with the CSRF token
+                const response = await fetch(
+                    "http://127.0.0.1:8080/api/users/login",
+                    {
+                        method: "POST",
+                        headers: {
+    "Content-Type": "application/json",
+    [csrfData.headerName]: csrfData.token
+},
+                        credentials: "include",
+                        body: JSON.stringify({
+                            email: email,
+                            password: password
+                        })
+                    }
+                );
+
+                const data = await response.json();
+
+                if (response.ok) {
+    message.textContent =
+        "Login successful! Welcome, " + data.name + ".";
+    message.style.color = "green";
+
+    if (data.role === "ADMIN") {
+    window.location.href = "pages/admin-dashboard.html";
+    } else if (data.role === "CUSTOMER") {
+        window.location.href = "my-bookings.html";
+    } else {
+        message.textContent = "Unknown user role.";
+        message.style.color = "red";
+    }
+} else {
+                    message.textContent =
+                        data.message || "Login failed. Please check your credentials.";
+                    message.style.color = "red";
+                }
+
+            } catch (error) {
+                console.error("Login error:", error);
+
+                message.textContent =
+                    "Unable to complete login. Check the server connection and try again.";
+                message.style.color = "red";
+            }
+        });
+    </script>
+
+</body>
+</html>

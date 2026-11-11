@@ -1,0 +1,42 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Bookings | SmartService</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="booking-page">
+
+    <header class="site-header">
+        <div class="container">
+            <h1>SmartService</h1>
+            <nav>
+                <a href="index.html">Home</a>
+                <a href="index.html#services">Services</a>
+                <a href="my-bookings.html">My Bookings</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="booking-intro">
+            <h2>My Bookings</h2>
+            <p>View your service bookings and their current status.</p>
+        </section>
+
+        <section id="bookings-container" class="my-bookings-list">
+            <p>Loading your bookings...</p>
+        </section>
+
+        <p id="bookings-message" role="status"></p>
+
+        <a href="index.html#services" class="back-link">
+            ← Explore Services
+        </a>
+    </main>
+
+    <script src="js/my-bookings.js"></script>
+</body>
+</html>

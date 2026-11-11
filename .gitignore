@@ -1,0 +1,24 @@
+
+# Java / Maven
+backend/target/
+*.class
+
+# IDE files
+.idea/
+.vscode/
+*.iml
+
+# Logs
+*.log
+
+# Environment and secret files
+.env
+.env.*
+!.env.example
+
+# Session cookies and credentials
+backend/cookies.txt
+
+# OS files
+.DS_Store
+Thumbs.db

@@ -1,0 +1,117 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Dashboard - SmartService</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+
+    <header>
+        <h1>SmartService</h1>
+
+        <nav>
+            <a href="../index.html">Home</a>
+            <a href="#" id="logoutBtn">Logout</a>
+        </nav>
+    </header>
+
+    <main>
+
+        <section class="dashboard-section">
+
+            <h2>Admin Dashboard</h2>
+
+            <p>
+                Monitor and manage the SmartService platform.
+            </p>
+
+            <div class="admin-stats">
+
+                <div class="stat-card">
+    <h3>Users</h3>
+    <p>Not Available</p>
+</div>
+
+<div class="stat-card">
+    <h3>Providers</h3>
+    <p>Not Available</p>
+</div>
+
+                <div class="stat-card">
+                    <h3>Bookings</h3>
+                    <p id="totalBookings">0</p>
+                </div>
+
+                <div class="stat-card">
+                    <h3>Completed Services</h3>
+                    <p id="completedBookings">0</p>
+                </div>
+
+            </div>
+
+            <div class="admin-section">
+
+                <h3>Recent Bookings</h3>
+
+                <div id="recentBookings">
+                    <p>Loading recent bookings...</p>
+                </div>
+
+            </div>
+
+            <p>
+                <a href="../admin/admin.bookings.html">
+                    Manage All Bookings
+                </a>
+            </p>
+
+        </section>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2026 SmartService. All rights reserved.</p>
+    </footer>
+
+    <script>
+        async function checkAdminAccess() {
+            try {
+                const response = await fetch(
+                    "http://127.0.0.1:8080/api/auth/me",
+                    {
+                        credentials: "include"
+                    }
+                );
+
+                if (!response.ok) {
+                    window.location.href = "../login.html";
+                    return;
+                }
+
+                const user = await response.json();
+
+                if (user.role !== "ROLE_ADMIN") {
+                    alert("Access denied! Admins only.");
+                    window.location.href = "../my-bookings.html";
+                }
+
+            } catch (error) {
+                alert("Unable to verify your login.");
+                window.location.href = "../login.html";
+            }
+        }
+
+        checkAdminAccess();
+    </script>
+    <script src="admin-dashboard.js"></script>
+
+</body>
+
+</html>

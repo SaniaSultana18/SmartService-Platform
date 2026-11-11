@@ -1,0 +1,115 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - SmartService</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+
+    <header>
+        <h1>SmartService</h1>
+        <nav>
+            <a href="../index.html">Home</a>
+            <a href="../login.html">Login</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="form-section">
+            <h2>Create Account</h2>
+
+            <form id="registerForm">
+
+                <label for="name">Full Name</label>
+                <input type="text" id="name" placeholder="Enter your full name" required>
+
+                <label for="email">Email</label>
+                <input type="email" id="email" placeholder="Enter your email" required>
+
+                <label for="password">Password</label>
+                <input type="password" id="password"
+                    placeholder="Create a password" required>
+
+                <button type="submit">Create Account</button>
+
+            </form>
+
+            <p id="message"></p>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 SmartService. All rights reserved.</p>
+    </footer>
+
+    <script>
+        const API_URL = "http://127.0.0.1:8080/api";
+
+        const registerForm = document.getElementById("registerForm");
+        const message = document.getElementById("message");
+
+        registerForm.addEventListener("submit", async function (event) {
+            event.preventDefault();
+
+            const name = document.getElementById("name").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value;
+
+            const userData = {
+                name: name,
+                email: email,
+                password: password
+            };
+
+            try {
+    // Get CSRF token
+    const csrfResponse = await fetch(`${API_URL}/csrf`, {
+        credentials: "include"
+    });
+
+    if (!csrfResponse.ok) {
+        throw new Error("Unable to get CSRF token.");
+    }
+
+    const csrfData = await csrfResponse.json();
+
+    // Submit registration
+    const response = await fetch(`${API_URL}/users`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json",
+            [csrfData.headerName]: csrfData.token
+        },
+        body: JSON.stringify(userData)
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+        throw new Error(data.message || `Registration failed (${response.status}).`);
+    }
+
+    message.textContent = "Account created successfully! Redirecting to login...";
+    message.style.color = "green";
+
+    registerForm.reset();
+
+    setTimeout(() => {
+        window.location.href = "../login.html";
+    }, 2000);
+
+} catch (error) {
+    message.textContent = error.message;
+    message.style.color = "red";
+}
+        });
+    </script>
+
+</body>
+</html>

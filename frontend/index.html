@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Service Platform</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <h1>SmartService</h1>
+<nav>
+    <a href="index.html">Home</a>
+    <a href="my-bookings.html">My Bookings</a>
+    <a href="index.html#services">Services</a>
+    <a href="login.html">Login</a>
+    <a href="pages/register.html">Register</a>
+    <a href="#" id="logoutLink">Logout</a>
+</nav>
+
+    </header>
+
+
+    <main>
+
+        <section class="hero">
+
+            <h2>Find the Right Service, at the Right Time.</h2>
+
+            <p>
+                Connect with trusted service providers, check availability,
+                and book the service you need—all in one place.
+            </p>
+
+            <div class="buttons">
+    <button onclick="window.location.href='index.html#services'">
+        Find a Service
+    </button>
+
+    <button onclick="window.location.href='pages/register.html'">
+        Create Account
+    </button>
+</div>
+    </section>
+<section class="services-section" id="services">
+    <h2>Our Services</h2>
+    <p>Explore the services available on SmartService.</p>
+
+<div id="services-container" class="service-grid">
+    <p>Loading services...</p>
+    </div>
+</section>
+
+    </main>
+
+
+    <footer>
+        <p>&copy; 2026 SmartService. All rights reserved.</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+
+</body>
+
+<script>
+    const logoutLink = document.getElementById("logoutLink");
+
+    logoutLink.addEventListener("click", async function (event) {
+        event.preventDefault();
+
+        try {
+            // Get CSRF token
+            const csrfResponse = await fetch(
+                "http://127.0.0.1:8080/api/csrf",
+                {
+                    credentials: "include"
+                }
+            );
+
+            if (!csrfResponse.ok) {
+                throw new Error("Unable to get CSRF token");
+            }
+
+            const csrfData = await csrfResponse.json();
+
+            // Send logout request
+            const response = await fetch(
+                "http://127.0.0.1:8080/api/users/logout",
+                {
+                    method: "POST",
+                    credentials: "include",
+                    headers: {
+                        [csrfData.headerName]: csrfData.token
+                    }
+                }
+            );
+
+            if (response.ok) {
+                alert("Logged out successfully!");
+                window.location.href = "login.html";
+            } else {
+                throw new Error("Logout failed: " + response.status);
+            }
+
+        } catch (error) {
+            console.error("Logout error:", error);
+            alert("Logout failed. Please try again.");
+        }
+    });
+</script>
+
+</html>
